@@ -93,17 +93,26 @@ window.interface = {
       * @param {Object} actionArgs - 액션의 인자
       */
     aosCommand: function(callbackID, action, actionArgs) {
-        var actionArgsStringfy = JSON.stringify(actionArgs);
+        var actionArgsStringify = JSON.stringify(actionArgs);
         var callbackIDString = callbackID.toString();
-        AndroidInterface.requestFromWeb(callbackIDString, action, actionArgsStringfy);
+        AndroidInterface.requestFromWeb(callbackIDString, action, actionArgsStringify);
     }
 };
+
+var onResponseFromNative = function(callbackID, isSuccess, args, keepCallback) {
+    window.interface.nativeCallback(callbackID, isSuccess, args, keepCallback);
+}
 
 window.showMenu = function (titles, successCallback, failCallback) {
     var action = 'showMenu';
     var args = { titles: titles };
     window.interface.executeInterface(successCallback, failCallback, action, args);
 };
+
+window.scanQRcode = function (successCallback, failCallback) {
+    var action = "scanQRcode";
+    window.interface.executeInterface(successCallback, failCallback, action);
+}
 
 window.showMenu(
     ['A', 'B', 'C'],
@@ -115,6 +124,11 @@ window.showMenu(
     }
 );
 
-var onResponseFromNative = function(callbackID, isSuccess, args, keepCallback) {
-    window.interface.nativeCallback(callbackID, isSuccess, args, keepCallback);
-}
+//window.scanQRcode(
+//    function(response) {
+//        console.log(`QR Code Success : ${JSON.stringify(response)}`);
+//    },
+//    function() {
+//        console.log('Error');
+//    }
+//);
